@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using Microsoft.Extensions.CommandLineUtils;
-using Newtonsoft.Json;
+﻿using Microsoft.Extensions.CommandLineUtils;
 
 namespace Jira
 {
