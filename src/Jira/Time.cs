@@ -14,10 +14,10 @@ namespace Jira
         {
             command.Description = "Log your time";
             command.HelpOption("-?|-h|--help");
-
-            var issueOption = command.Option("-i|--issue", "The issue you will be logging time on",
+           
+            var issueOption = command.Option("-i|--issue", "The issue you will be logging time on (Required)",
                 CommandOptionType.SingleValue);
-            var timeOption = command.Option("-t|--time", "The time to log, will default to today",
+            var timeOption = command.Option("-t|--time", "The time to log, will default to today (Required)",
                 CommandOptionType.SingleValue);
             var dateOption = command.Option("-d|--date", "The date to log time on (YYYY-MM-DD)",
                 CommandOptionType.SingleValue);
@@ -33,14 +33,14 @@ namespace Jira
                 var hasErrors = false;
                 if (!issueOption.HasValue())
                 {
-                    Logger.Error("You forgot to supply an issue, \\>Jira --Issue something --time 7.5 --date 01-02-2017");
+                    Logger.Error("You forgot to supply an issue, \\>jira --issue something --time 7,5 --date 01-02-2017");
                     hasErrors = true;
                 }
 
                 if (!timeOption.HasValue())
                 {
                     Logger.Error(
-                        "You forgot to supply how much time you spend, \\>Jira --Issue something --time 7.5 --date 01-02-2017");
+                        "You forgot to supply how much time you spend, \\>jira --issue something --time 7,5 --date 01-02-2017");
                     hasErrors = true;
                 }
                 if (hasErrors)
