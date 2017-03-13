@@ -2,7 +2,7 @@
   "profiles": {
     "Jira": {
       "commandName": "Project",
-      "commandLineArgs": "time --issue lego --time \"1,5\" --comment \"dotNet cli test\""
+      "commandLineArgs": "time --issue lego --time 7,5 --comment \"dotNet cli test\""
     }
   }
 }
