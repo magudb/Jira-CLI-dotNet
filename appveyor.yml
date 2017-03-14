@@ -10,13 +10,13 @@ build_script:
 
 artifacts:
   - path: windows
-    name: Jira-win10-x64-$(build)
+    name: Jira-win10-x64-$(appveyor_build_version)
     type: zip
   - path: ubuntu
-    name: Jira-ubuntu.14.04-x64-0.9.0
+    name: Jira-ubuntu.14.04-x64-{version}
     type: zip
   - path: macosx
-    name: Jira-osx.10.11-x64-0.9.0
+    name: Jira-osx.10.11-x64-{build}
     type: zip
 
 deploy:
