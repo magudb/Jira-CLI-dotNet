@@ -1,7 +1,4 @@
-﻿using System;
-using System.IO;
-using Microsoft.Extensions.CommandLineUtils;
-using Newtonsoft.Json;
+﻿using Microsoft.Extensions.CommandLineUtils;
 
 namespace Jira
 {
@@ -10,7 +7,7 @@ namespace Jira
         
         private static void Main(string[] args)
         {
-            var app = new CommandLineApplication {Name = "Jira"};
+            var app = new CommandLineApplication(throwOnUnexpectedArg: false) {Name = "Jira"};
             app.HelpOption("-?|-h|--help");
             
             app.Command("config", Configuration.Config);

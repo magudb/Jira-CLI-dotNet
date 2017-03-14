@@ -14,49 +14,48 @@ namespace Jira
         {
             command.Description = "Log your time";
             command.HelpOption("-?|-h|--help");
-
-            var issueOption = command.Option("-i|--issue", "The issue you will be logging time on",
+           
+            var issueOption = command.Option("-i|--issue", "The issue you will be logging time on (Required)",
                 CommandOptionType.SingleValue);
-            var timeOption = command.Option("-t|--time", "The time to log, will default to today",
+            var timeOption = command.Option("-t|--time", "The time to log, will default to today (Required)",
                 CommandOptionType.SingleValue);
             var dateOption = command.Option("-d|--date", "The date to log time on (YYYY-MM-DD)",
                 CommandOptionType.SingleValue);
             var commentOption = command.Option("-c|--comment", "the log comment, will default to 'Time logged'",
                 CommandOptionType.SingleValue);
 
-            var token = Configuration.Token().Result;
-            var config = Configuration.Read().Result;
-            var issues = new Issues(config.Url, token);
-
-            command.OnExecute(() =>
+            
+            command.OnExecute(async () =>
             {
+                var token = await Config.Token();
+                var config = await Config.Read();
+                var issues = new Issues(config.Url, token);
                 var hasErrors = false;
                 if (!issueOption.HasValue())
                 {
-                    Logger.Error("You forgot to supply an issue, \\>Jira --Issue something --time 7.5 --date 01-02-2017");
+                    Logger.Error("You forgot to supply an issue, \\>jira --issue something --time 7,5 --date 01-02-2017");
                     hasErrors = true;
                 }
 
                 if (!timeOption.HasValue())
                 {
                     Logger.Error(
-                        "You forgot to supply how much time you spend, \\>Jira --Issue something --time 7.5 --date 01-02-2017");
+                        "You forgot to supply how much time you spend, \\>jira --issue something --time 7,5 --date 01-02-2017");
                     hasErrors = true;
                 }
                 if (hasErrors)
                     return 1;
 
-               
-                Issue issue = null;
+
                 Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine($"Searching for {issueOption.Value()}");
                 Console.ResetColor();
-                var result = issues.Query(issueOption.Value()).Result;
+                var result = (await issues.Query(issueOption.Value())).ToList();
 
                 if (result.Count() > 1)
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
-                    Console.WriteLine($"Too many Issues, Please be more precise with your issue.");
+                    Console.WriteLine("Too many Issues, Please be more precise with your issue.");
                     Console.ResetColor();
                     return 1;
                 }
@@ -65,22 +64,22 @@ namespace Jira
                 
                 var ansidate = date.ToString("yyy-MM-dd");
                 var dateString = date.ToString("dd/MMM/yy").Replace("-", "/");
+
+                var issue = result.FirstOrDefault();
+                var remaningTime = await issues.GetRemaningWork(issue.Key, date.ToString("YYYY-MM-DD"), timeOption.Value(),
+                    config.Username);
                 
+                var time = Double.Parse(timeOption.Value());
+                var comment = commentOption.HasValue() ? commentOption.Value() : "Time logged";
+
+               
+                Logger.Information($"Logging {time.ToString(CultureInfo.InvariantCulture)} hours");
+                Logger.Information($"Remaning time on {issue.Name} ({issue.Key}) : {remaningTime}");
+                Logger.Information($"Using comment : {comment}");
+                Logger.Information($"Using date : {ansidate} ({dateString})");
 
                 if (!dateOption.HasValue())
                     Logger.Warning($"You did not supply date, will default to today ({dateString})");
-
-                issue = result.FirstOrDefault();
-                var remaningTime = issues.GetRemaningWork(issue.Key, date.ToString("YYYY-MM-DD"), timeOption.Value(),
-                    config.Username).Result;
-
-                Logger.Information($"Remaning time on task : {remaningTime}");
-
-                var time = Double.Parse(timeOption.Value());
-
-                Logger.Information($"Logging {time} hours");
-
-                var comment = commentOption.HasValue() ? commentOption.Value() : "Time logged";
 
                 var formContent = new FormUrlEncodedContent(new[]
                 {
@@ -109,9 +108,14 @@ namespace Jira
 
                 var client = new HttpClient();
                 client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", token);
-                var response = client.PostAsync(new Uri($"{config.Url}/rest/tempo-rest/1.0/worklogs/${issue.Key}"), formContent);
-                var t = response.Result;
-                Console.ReadLine();
+                var url = $"{config.Url}/rest/tempo-rest/1.0/worklogs/{issue.Key}";
+                Logger.Information(url);
+                var request = new HttpRequestMessage(HttpMethod.Post, url) {Content = formContent};
+
+                var response = await client.SendAsync(request);
+                var resultContent = await response.Content.ReadAsStringAsync();
+                Console.WriteLine(resultContent);
+               
                 return 0;
             });
         }
