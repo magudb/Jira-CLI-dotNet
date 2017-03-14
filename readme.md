@@ -1,5 +1,6 @@
 # Builds #
-![Travis build](https://travis-ci.org/magudb/Jira-CLI-dotNet.svg?branch=master)
+ * Travis-CI : ![Travis build](https://travis-ci.org/magudb/Jira-CLI-dotNet.svg?branch=master)
+ * Appveyor : [![Build status](https://ci.appveyor.com/api/projects/status/thwhxqj79s37pdjm?svg=true)](https://ci.appveyor.com/project/magudb/jira-cli-dotnet)
 
 # Jira CLI#
 This is currently only for the Tempo login, but it should be expandable.
