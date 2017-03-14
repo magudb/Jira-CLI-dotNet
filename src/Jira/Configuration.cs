@@ -1,11 +1,18 @@
 ﻿using System;
+using Jira.Entities;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace Jira
 {
     public class Configuration
     {
-        public static void Config(CommandLineApplication command)
+        private readonly string _home;
+
+        public Configuration(string home)
+        {
+            _home = home;
+        }
+        public  void ExecuteConfiguration(CommandLineApplication command)
         {
             command.Description = "Configure your Jira Cli";
             command.HelpOption("-?|-h|--help");
@@ -58,9 +65,10 @@ namespace Jira
                 {
                     url = urlOption.Value();
                 }
-                Entities.Config.Write(username, password, url);
+                var config = new Config(username, password, url, _home);
+                config.Write();
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"Your configuration has been written to {Entities.Config.Home}/.jira-cli-config.json");
+                Console.WriteLine($"Your configuration has been written to {_home}/.jira-cli-config.json");
                 Console.ResetColor();
                 return 0;
             });

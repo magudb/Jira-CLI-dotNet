@@ -7,14 +7,29 @@ namespace Jira.Entities
 {
     public class Config
     {
-        public string Username { get; set; }
-        public string Password { get; set; }
-        public string Url { get; set; }
-
-
-        public static async Task<Config> Read()
+        
+        public Config(string username, string password, string url, string home)
         {
-            var stream = File.Open($"{Home}\\.jira-cli-config.json", FileMode.Open);
+            Username = username;
+            Password = password;
+            Url = url;
+            Home = home;
+        }
+
+        public string Username { get;  }
+        public string Password { get;  }
+        public string Url { get;  }
+        public string Home { get; }
+
+
+        public static async Task<Config> Read(string home)
+        {
+            var file = $"{home}\\.jira-cli-config.json";
+            if (!File.Exists(file))
+            {
+                return Config.Empty();
+            }
+            var stream = File.Open(file, FileMode.Open);
             var reader = new StreamReader(stream);
             var config = await reader.ReadToEndAsync();
             reader.Dispose();
@@ -22,15 +37,15 @@ namespace Jira.Entities
             return JsonConvert.DeserializeObject<Config>(config);
         }
 
-        public static void Write(string username, string password, string url)
+        public static Config Empty()
         {
-            var config = new Config
-            {
-                Username = username,
-                Password = password,
-                Url = url
-            };
-            var configString = JsonConvert.SerializeObject(config);
+            return  new Config(string.Empty, string.Empty, string.Empty, string.Empty);
+        }
+
+        public void Write()
+        {
+           
+            var configString = JsonConvert.SerializeObject(this);
             var configFile = File.Create($"{Home}\\.jira-cli-config.json");
             var logWriter = new StreamWriter(configFile);
             logWriter.Write(configString);
@@ -38,26 +53,17 @@ namespace Jira.Entities
             configFile.Dispose();
         }
 
-        public static string Home
-        {
-            get
-            {
-                var homeDir = Environment.GetEnvironmentVariable("HOMEDRIVE");
-                var homePath = Environment.GetEnvironmentVariable("HOMEPATH");
-                return $"{homeDir}{homePath}";
-            }
-        }
+        
 
-        public static async Task<string> Token()
+        public string Token()
         {
-            var config = await Read();
-            return Base64Encode($"{config.Username}:{config.Password}");
+            return Base64Encode($"{Username}:{Password}");
         }
 
         private static string Base64Encode(string plainText)
         {
             var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
-            return System.Convert.ToBase64String(plainTextBytes);
+            return Convert.ToBase64String(plainTextBytes);
         }
     }
 }
