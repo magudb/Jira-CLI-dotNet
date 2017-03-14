@@ -3,7 +3,8 @@ os: Visual Studio 2017
 build_script:
   - ps: dotnet restore
   - ps: dotnet build
-  - ps: dotnet publish -c release -r win10-x64 --output %appveyor_build_folder%\dist
+  - ps: dotnet publish -c release -r win10-x64 -o dist
+  - ps: dotnet msbuild /t:Publish /p:OutputPath=dist /p:Configuration=Release
 
 artifacts:
   - path: dist
