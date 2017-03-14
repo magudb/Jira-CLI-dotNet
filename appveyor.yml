@@ -10,7 +10,7 @@ build_script:
 
 artifacts:
   - path: windows
-    name: Jira-Win10-x64-0.9.0
+    name: Jira-win10-x64-$(build)
     type: zip
   - path: ubuntu
     name: Jira-ubuntu.14.04-x64-0.9.0
