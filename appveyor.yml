@@ -5,8 +5,11 @@ build_script:
   - ps: dotnet --info 
   - ps: dotnet restore
   - ps: dotnet --verbose build
-  - ps: dotnet publish -c release -r win10-x64
-
+  - ps: dotnet publish -c release -r win10-x64 --output "out/"
+artifacts:
+  - path: out
+    name: Jira cli
+    type: zip
 
 test: off 
 version: 0.0.1.{build}
