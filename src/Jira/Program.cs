@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Runtime.InteropServices;
 using Jira.Entities;
 using Jira.Services;
 using Microsoft.Extensions.CommandLineUtils;
@@ -10,9 +11,17 @@ namespace Jira
         public static string Home {
             get
             {
-                var homeDir = Environment.GetEnvironmentVariable("HOMEDRIVE");
-                var homePath = Environment.GetEnvironmentVariable("HOMEPATH");
-                return $"{homeDir}{homePath}";
+                if (System.Runtime.InteropServices.RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+
+                    var homeDir = Environment.GetEnvironmentVariable("HOMEDRIVE");
+                    var homePath = Environment.GetEnvironmentVariable("HOMEPATH");
+                    return $"{homeDir}{homePath}";
+                }
+                else
+                {
+                    return Environment.GetEnvironmentVariable("HOME");
+                }
             }
         }
         
