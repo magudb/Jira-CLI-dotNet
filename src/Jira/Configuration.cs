@@ -58,9 +58,9 @@ namespace Jira
                 {
                     url = urlOption.Value();
                 }
-                Jira.Config.Write(username, password, url);
+                Entities.Config.Write(username, password, url);
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"Your configuration has been written to {Jira.Config.Home}/.jira-cli-config.json");
+                Console.WriteLine($"Your configuration has been written to {Entities.Config.Home}/.jira-cli-config.json");
                 Console.ResetColor();
                 return 0;
             });

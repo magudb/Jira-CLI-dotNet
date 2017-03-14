@@ -5,7 +5,7 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Jira
+namespace Jira.Entities
 {
     public class Issues
     {
@@ -58,25 +58,4 @@ namespace Jira
             Name = name;
         }
     }
-
-    public class Item
-    {
-        public string type { get; set; }
-        public string key { get; set; }
-        public string html { get; set; }
-        public string icon { get; set; }
-        public string name { get; set; }
-    }
-
-    public class Group
-    {
-        public string title { get; set; }
-        public List<Item> item { get; set; }
-    }
-
-    public class RootObject
-    {
-        public List<Group> group { get; set; }
-    }
-
 }

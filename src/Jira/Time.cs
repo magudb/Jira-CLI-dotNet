@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using Jira.Entities;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace Jira

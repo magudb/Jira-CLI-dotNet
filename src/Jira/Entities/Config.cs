@@ -1,10 +1,9 @@
 using System;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace Jira
+namespace Jira.Entities
 {
     public class Config
     {

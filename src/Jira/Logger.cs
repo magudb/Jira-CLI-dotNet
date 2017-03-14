@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Jira
 {
-    class Logger
+    internal class Logger
     {
         public static void Error(string message)
         {
