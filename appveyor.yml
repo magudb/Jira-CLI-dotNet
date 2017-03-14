@@ -25,9 +25,9 @@ deploy:
   provider: GitHub
   auth_token:
     secure: yYx7QrCyq5Q4NB5FXpdp405AZV9SnuqqOoaN4RiTgK5qPA4eOa7YHTtemhhR4Kk9
-  artifact: Jira-Win10-x64-0.9.0
-  draft: true
-  prerelease: false
+  artifact: /.*\.zip/ 
+  draft: false
+  prerelease: true
   on:
     branch: master                 # release from master branch only
     appveyor_repo_tag: false        # deploy on tag push only 
