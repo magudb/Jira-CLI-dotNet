@@ -1,11 +1,10 @@
 os: Visual Studio 2017
 
 build_script:
-  # dotnet info
-  - ps: dotnet --info 
   - ps: dotnet restore
-  - ps: dotnet --verbose build
+  - ps: dotnet build
   - ps: dotnet publish -c release -r win10-x64 --output "out/"
+  
 artifacts:
   - path: out
     name: Jira cli
