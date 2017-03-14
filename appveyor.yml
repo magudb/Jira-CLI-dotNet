@@ -13,15 +13,15 @@ artifacts:
     name: Jira-win10-x64-$(appveyor_build_version)
     type: zip
   - path: ubuntu
-    name: Jira-ubuntu.14.04-x64-{version}
+    name: Jira-ubuntu.14.04-x64-$(appveyor_build_version)
     type: zip
   - path: macosx
-    name: Jira-osx.10.11-x64-{build}
+    name: Jira-osx.10.11-x64-$(appveyor_build_version)
     type: zip
 
 deploy:
   release: jira-v$(appveyor_build_version)
-  description: 'Release description'
+  description: 'Jira Tempo CLI'
   provider: GitHub
   auth_token:
     secure: yYx7QrCyq5Q4NB5FXpdp405AZV9SnuqqOoaN4RiTgK5qPA4eOa7YHTtemhhR4Kk9
@@ -33,4 +33,4 @@ deploy:
     appveyor_repo_tag: false        # deploy on tag push only 
 
 test: off 
-version: 0.9.0.{build}
+version: 0.9.8.{build}
