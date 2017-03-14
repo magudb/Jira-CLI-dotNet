@@ -15,5 +15,6 @@ script:
   - mkdir -p "test/test-dotnet-new" && pushd "test/test-dotnet-new"
   - dotnet new
   - dotnet restore
-  - dotnet --verbose run a b
+  - dotnet --verbose build
+  - dotnet publish -c release -r ubuntu.14.04-x64
   - popd
